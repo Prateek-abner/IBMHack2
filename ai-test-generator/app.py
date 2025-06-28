@@ -5,13 +5,15 @@ import uuid
 from werkzeug.utils import secure_filename
 from granite_client import GraniteClient
 from spec_parser import SpecParser
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['GENERATED_TESTS_FOLDER'] = 'generated_tests'
-
-granite_client = GraniteClient()
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['GENERATED_TESTS_FOLDER'], exist_ok=True)
@@ -82,6 +84,9 @@ text
 Generate the complete test implementation now:"""
     
     return prompt
+
+# Initialize GraniteClient (it should read env vars internally)
+granite_client = GraniteClient()
 
 @app.route('/')
 def index():

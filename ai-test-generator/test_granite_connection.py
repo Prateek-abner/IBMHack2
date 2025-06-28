@@ -1,10 +1,17 @@
+from dotenv import load_dotenv
+load_dotenv()
 import requests
 import json
+import os
 
-# Your credentials
-api_key = "oS3eRXK2a8wdPcoEYg6XrH0lr60pD1r1cWY0ueh2uYS1"
-project_id = "423037e0-7293-43bf-bcb8-0a3bd65f9ef6"
+api_key = os.environ.get("IBM_API_KEY")
+project_id = os.environ.get("IBM_PROJECT_ID")
 base_url = "https://us-south.ml.cloud.ibm.com"
+
+# Check for required environment variables
+if not api_key or not project_id:
+    print("❌ ERROR: IBM_API_KEY or IBM_PROJECT_ID is not set.")
+    exit(1)
 
 def test_1_api_key_validity():
     """Test if API key can generate IAM token"""
@@ -93,7 +100,7 @@ def test_3_available_models(token):
         print(f"❌ Error getting models: {e}")
         return []
 
-def test_4_granite_model_access(token, model_id="granite-8b-code-instruct"):
+def test_4_granite_model_access(token, model_id="ibm/granite-8b-code-instruct"):
     """Test specific Granite model access"""
     print(f"\n=== TEST 4: Granite Model Access ({model_id}) ===")
     try:
@@ -144,10 +151,8 @@ def test_5_alternative_models(token, available_models):
     
     # Common Granite model variations to try
     models_to_try = [
-        "granite-8b-code-instruct-128k",
-        "granite-3b-code-instruct",
-        "granite-20b-code-instruct",
-        "granite-34b-code-instruct"
+        "ibm/granite-8b-code-instruct",
+        "ibm/granite-20b-code-instruct",
     ]
     
     # Add any models we found in the available list
